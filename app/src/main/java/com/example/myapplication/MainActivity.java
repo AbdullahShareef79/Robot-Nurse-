@@ -1,21 +1,17 @@
 package com.example.myapplication;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
 
-import com.aldebaran.qi.Future;
 import com.aldebaran.qi.sdk.QiContext;
 import com.aldebaran.qi.sdk.QiSDK;
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks;
 import com.aldebaran.qi.sdk.builder.ChatBuilder;
 import com.aldebaran.qi.sdk.builder.QiChatbotBuilder;
-import com.aldebaran.qi.sdk.builder.SayBuilder;
 import com.aldebaran.qi.sdk.builder.TopicBuilder;
 import com.aldebaran.qi.sdk.design.activity.RobotActivity;
 import com.aldebaran.qi.sdk.object.conversation.Chat;
-import com.aldebaran.qi.sdk.object.conversation.QiChatVariable;
 import com.aldebaran.qi.sdk.object.conversation.QiChatbot;
 import com.aldebaran.qi.sdk.object.conversation.Topic;
 
@@ -23,7 +19,18 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
 
     private static final String TAG = "MainActivity";
 
-    private QiContext qiContext = null;
+    private QiContext qiContext;
+    private QiChatbot qiChatbot;
+
+
+
+    private final String[] questions = {
+            "What is your name?",
+            "How old are you?",
+            "Do you have any allergies?",
+            "What is your favorite color?"
+    };
+    private int currentQuestionIndex = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,25 +38,15 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         setContentView(R.layout.activity_main);
 
         Button startButton = findViewById(R.id.startButton);
-        Button exitButton = findViewById(R.id.exitButton);
+        startButton.setOnClickListener(v -> startChatbot());
 
-        startButton.setOnClickListener(v -> {
-            // Navigate to SecondActivity
-            Intent intent = new Intent(MainActivity.this, SecondActivity.class);
-            startActivity(intent);
-        });
-
-        exitButton.setOnClickListener(v -> {
-            finish(); // Close the app
-        });
-
-        // Register the QiSDK
+        // Register the robot lifecycle callbacks
         QiSDK.register(this, this);
     }
 
     @Override
     protected void onDestroy() {
-        // Unregister QiSDK
+        // Unregister the robot lifecycle callbacks
         QiSDK.unregister(this, this);
         super.onDestroy();
     }
@@ -58,7 +55,6 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
     public void onRobotFocusGained(QiContext qiContext) {
         this.qiContext = qiContext;
         Log.d(TAG, "Robot focus gained.");
-        introduceRobot(); // Make Pepper speak the introduction when robot focus is gained
     }
 
     @Override
@@ -72,53 +68,58 @@ public class MainActivity extends RobotActivity implements RobotLifecycleCallbac
         Log.e(TAG, "Robot focus refused: " + reason);
     }
 
-    // Method to introduce the robot with speech
-    private void introduceRobot() {
+    private void startChatbot() {
         if (qiContext != null) {
-            String introduction = "Hallo, ich bin Pepper. Ich werde Ihnen bei diesem Screening helfen. Bitte klicken Sie auf Starten, um zu beginnen.";
-
-            // Use SayBuilder to make the robot say the introduction
-            Future<Void> sayFuture = SayBuilder.with(qiContext)
-                    .withText(introduction)
-                    .build()
-                    .async()
-                    .run();
-
-            // Log success or failure of the speech
-            sayFuture.thenConsume(future -> {
-                if (future.isSuccess()) {
-                    Log.d(TAG, "Introduction completed.");
-                    // After introduction, you can proceed with chat or any other actions
-                    startChatbot();  // Optional: Start the chatbot if needed
-                } else {
-                    Log.e(TAG, "Failed to deliver introduction: ", future.getError());
+            // Run the resource-building in a separate thread
+            new Thread(() -> {
+                try {
+                    // Build the topic using the dialog resource
+                    Topic topic = TopicBuilder.with(qiContext).withResource(R.raw.dialog).build();
+                    runOnUiThread(() -> initializeChatbot(topic));
+                } catch (Exception e) {
+                    Log.e(TAG, "Error building topic: " + e.getMessage());
                 }
-            });
+            }).start();
         }
     }
 
-    // Initialize the chatbot and set up the chat topic and variables (Optional)
-    private void startChatbot() {
-        // Create a chat topic
-        Topic topic = TopicBuilder.with(qiContext)
-                .withResource(R.raw.dialog) // Make sure to update to your actual topic resource file
-                .build();
+    private void initializeChatbot(Topic topic) {
+        new Thread(() -> {
+            try {
+                qiChatbot = QiChatbotBuilder.with(qiContext).withTopic(topic).build();
+                Log.d(TAG, "Chatbot initialized.");
+                Chat chat = ChatBuilder.with(qiContext).withChatbot(qiChatbot).build();
+                Log.d(TAG, "Chat started.");
+                chat.async().run();
+            } catch (Exception e) {
+                Log.e(TAG, "Error initializing chatbot: " + e.getMessage());
+            }
+        }).start();
+    }
 
-        // Create a new QiChatbot
-        QiChatbot qiChatbot = QiChatbotBuilder.with(qiContext)
-                .withTopic(topic)
-                .build();
+    private void introduceRobot() {
+        Log.d(TAG, "Starting introduction...");
+        String introduction = "Hi, I am Pepper. Let's start a screening process.";
+        qiChatbot.variable("question").async().setValue(introduction);
+        try {
+            Thread.sleep(3000); // Sleep for 3 seconds before starting the questions
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        askNextQuestion();
+    }
 
-        // Create a new Chat action
-        Chat chatAction = ChatBuilder.with(qiContext)
-                .withChatbot(qiChatbot)
-                .build();
+    private void askNextQuestion() {
+        if (currentQuestionIndex < questions.length) {
+            // Set the next question in the "question" variable
+            qiChatbot.variable("question").async().setValue(questions[currentQuestionIndex]);
 
-        // Set up a listener for a chat variable (for example, Name)
-        QiChatVariable nameVariable = qiChatbot.variable("Name");
-        nameVariable.addOnValueChangedListener(currentValue -> Log.i(TAG, "Chat var Name: " + currentValue));
-
-        // Start the chat action asynchronously (Optional)
-        chatAction.async().run();
+            // Move to the next question after receiving the answer
+            currentQuestionIndex++;
+        } else {
+            Log.i(TAG, "All questions asked. Chat completed.");
+            // Optionally reset or perform an action when all questions are done
+            currentQuestionIndex = 0;
+        }
     }
 }

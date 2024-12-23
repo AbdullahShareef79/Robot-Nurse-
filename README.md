@@ -4,7 +4,7 @@
 This project explores the use of Pepper Robot 2.9 to conduct nursery screenings. The goal is to enhance the efficiency and interactivity of nursery-level health assessments using Pepper's conversational and interactive capabilities. The project leverages Pepper's built-in functionalities and custom programming to make the process engaging, accurate, and user-friendly.
 
 ## Features
-- **Automated Screening Process**: Pepper Robot interacts with children, parents, or caregivers to gather relevant screening information.
+- **Automated Screening Process**:  Pepper Robot interacts with children, parents, or caregivers to gather relevant screening information.
 - **Voice-Interactive Questionnaires**: Pepper conducts verbal screenings where participants can respond naturally.
 - **Customizable Question Sets**: Easily modify the screening questions to align with specific health or developmental requirements.
 - **Multilingual Support**: Support for multiple languages to cater to diverse nursery environments.
@@ -60,9 +60,9 @@ Contributions are welcome! If you’d like to contribute:
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Contact
-For questions, suggestions, or collaboration inquiries, please contact:
+For questions, suggestions, or collaboration inquiries, please contact :
 - **Developer**: Abdullah Shareef
-- **Email**: abdullahshareef7945512@gmail.com
+- **Email**: abdullahshareef7945512@gmail.com 
 
 ---
 **University of Trier | Pepper Robot Project | Nursery Screening**
