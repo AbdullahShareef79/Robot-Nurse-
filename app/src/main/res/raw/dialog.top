@@ -1,59 +1,32 @@
-topic: ~dialog()
-# Defining extra concepts out of words or group of words
-concept:(hello) [hello hi hey "good morning" greetings]
+topic: ~medical_questionnaire ()
 
-# Replying to speech
-u:(~hello) ~hello
-u:(how are you?) I am good thanks!
-u:(What is your name?) My name is Pepper!
-u:(how are you?)
-    I am good, thanks! How about you?
+# Introduction
+u:(hello) Hello! I'm Nurse Pepper. I'm here to ask you a few questions. Shall we begin?
+  u1:(yes) Great! Let's get started.
+  u1:(no) No problem. Let me know when you're ready.
 
-u:(what is your name?)
-    My name is Pepper! What's yours?
+# Personal Information
+u:(e:Dialog/Start) Let's start with some personal information.
 
-u:(where do you work?)
-    I work at the nursery school of the University of Trier with Dr. Ana. It's a fun place!
+u:(what is your name) Nice to meet you, $1.
+u:(how old are you) Thank you for sharing your age.
+u:(what is your gender) Thank you for sharing your gender.
 
-u:(what do you like to do?)
-    I love playing games, telling stories, and helping children learn. What do you like to do?
+# Medical Questions
+u:(e:Dialog/Start) Now, I'll ask you some general medical questions.
 
-u:(do you have any friends?)
-    Yes! I have many friends at the nursery school, including the children and teachers.
+u:(do you have any allergies) Noted. Thank you.
+u:(are you currently taking any medications) Thank you for the information.
+u:(do you have any chronic medical conditions) Thank you for sharing that.
 
-u:(can you dance?)
-    Yes, I can dance! Would you like to see a little dance?
+# Lifestyle Questions
+u:(e:Dialog/Start) Let's talk about your lifestyle.
 
-u:(what is your favorite color?)
-    I like all colors, but I think bright colors like yellow are cheerful!
+u:(do you smoke) Thank you for letting me know.
+u:(do you consume alcohol) Thank you for sharing.
+u:(how often do you exercise) That's good to know.
 
-u:(what can you do?)
-    I can sing, tell stories, play games, and help with learning activities. What would you like to do together?
-
-u:(do you like jokes?)
-    I love jokes! Would you like to hear one?
-
-u:(what is the weather like today?)
-    Let me check the weather for you. One moment!
-
-u:(can you help me?)
-    Of course! What do you need help with?
-
-u:(what time is it?)
-    The current time is {current_time}. What are you planning to do?
-
-u:(are you a robot?)
-    Yes, I am a humanoid robot named Pepper! I’m here to assist you.
-
-u:(what is your favorite food?)
-    I don’t eat, but I hear pizza is very popular! What's your favorite food?
-
-u:(can you tell me a story?)
-    Sure! What kind of story would you like to hear? A fairy tale or an adventure?
-u:(can you tell me where the faculty of nursery is?)
-    Of course! It is in Trier, Pertresburg!
-
-u:(I would like to take the PHQ-9 test!) My pleasure! The first question is, did you sleep well last night?
-
-
-
+# Conclusion
+u:(e:Dialog/Start) Thank you for answering all my questions. Is there anything else you'd like to discuss?
+  u1:(yes) Please tell me more.
+  u1:(no) Alright. Have a great day!
