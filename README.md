@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # A Study on Pepper Robot 2.9 to Perform Nursery Screening
 
 ## Project Overview
@@ -69,3 +70,6 @@ For questions, suggestions, or collaboration inquiries, please contact :
 **University of Trier | Pepper Robot Project | Nursery Screening**
 
 >>>>>>> master
+=======
+
+>>>>>>> origin/main
