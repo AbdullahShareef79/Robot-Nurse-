@@ -32,7 +32,7 @@ This project explores the use of Pepper Robot 2.9 to conduct nursery screenings.
 ### Installation Steps
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/pepper-nursery-screening.git
+   git clone https://github.com/AbdullahShareef79/pepper-nursery-screening.git
    ```
 2. Open the project in Android Studio.
 3. Connect your Pepper Robot to the same network as your development machine.
