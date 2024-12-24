@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # A Study on Pepper Robot 2.9 to Perform Nursery Screening
 
 ## Project Overview
@@ -33,6 +34,7 @@ This project explores the use of Pepper Robot 2.9 to conduct nursery screenings.
 1. Clone the repository:
    ```bash
    git clone https://github.com/AbdullahShareef79/pepper-nursery-screening.git
+
    ```
 2. Open the project in Android Studio.
 3. Connect your Pepper Robot to the same network as your development machine.
@@ -67,3 +69,7 @@ For questions, suggestions, or collaboration inquiries, please contact :
 ---
 **University of Trier | Pepper Robot Project | Nursery Screening**
 
+>>>>>>> master
+=======
+
+>>>>>>> origin/main
