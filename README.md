@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 # A Study on Pepper Robot 2.9 to Perform Nursery Screening
 
 ## Project Overview
