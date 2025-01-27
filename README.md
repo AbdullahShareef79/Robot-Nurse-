@@ -68,8 +68,3 @@ For questions, suggestions, or collaboration inquiries, please contact :
 
 ---
 **University of Trier | Pepper Robot Project | Nursery Screening**
-
->>>>>>> master
-=======
-
->>>>>>> origin/main
